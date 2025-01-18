@@ -10,6 +10,8 @@ param storageAccountName string = 'adfstorageaccount'
 @description('Name of the container in the Azure Storage Account')
 param containerName string = 'adfcontainer'
 
+param storageAccount1 string = 'Y4Fo0vh4xap7U+VravqaJftr++ToUycBATaNeOJ1eLNJZkKyU3e9qZZCIPeLoP03xZmwO/s8gHCc+ASt9ejhfw=='
+
 var datafactoryLinkedServiceName = 'TestLinkedService'
 var datafactoryDatasetName = 'TestDataset'
 var datafactoryPipelineName = 'TestPipeline'
@@ -36,11 +38,12 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 }
 
 resource linkedService 'Microsoft.DataFactory/factories/linkedServices@2018-06-01' = {
-  name: '${dataFactoryName}/${datafactoryLinkedServiceName}'
+  name: datafactoryLinkedServiceName
+  parent: datafactory
   properties: {
     type: 'AzureBlobStorage'
     typeProperties: {
-      connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=[listKeys(resourceId('Microsoft.Storage/storageAccounts', storageAccountName), providers(\'Microsoft.Storage\', \'storageAccounts\').apiVersions[0]).keys[0].value];EndpointSuffix=core.windows.net'
+      connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccount1};EndpointSuffix=core.windows.net'
     }
   }
 }
