@@ -41,7 +41,7 @@ jobs:
         run: |
           az deployment group validate \
             --resource-group komatsu \
-            --template-file .github/workflows/main.bicep \
+            --template-file ./bicep/main.bicep \
             --parameters @./bicep/parameters.json
   
       # Step 5: Deploy Bicep Template
@@ -49,7 +49,7 @@ jobs:
         run: |
           az deployment group create \
             --resource-group komatsu \
-            --template-file .github/workflows/main.bicep \
+            --template-file ./bicep/main.bicep \
             --parameters @./bicep/parameters.json
 
       # # Step 6: Deploy Bicep Template for keyvault
