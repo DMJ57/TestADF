@@ -1,91 +1,106 @@
-@description('Resources location')
+@description('Name of the Data Factory')
+param dataFactoryName string = 'datafactoryTEST'
+
+@description('Location of the Data Factory')
 param location string = resourceGroup().location
 
-//----------- Function App Parameters ------------
+@description('Name of the Azure Storage Account that contains I/O & O/P data')
+param storageAccountName string = 'adfstorageaccount'
 
-//----------- Key Vault Parameters ------------
-@description('Key Vault name')
-@minLength(3)
-@maxLength(30)
-param myKeyVault string = 'komatsuKeyvault33'
+@description('Name of the container in the Azure Storage Account')
+param containerName string = 'adfcontainer'
 
-@description('keyVault SKU')
-@allowed([
-  'standard'
-  'Premium'
-])
-param keyVaultSku string = 'standard'
+param storageAccount1 string = 'Y4Fo0vh4xap7U+VravqaJftr++ToUycBATaNeOJ1eLNJZkKyU3e9qZZCIPeLoP03xZmwO/s8gHCc+ASt9ejhfw=='
 
-@description('Key Vault Tenant ID')
-@minLength(3)
-@maxLength(50)
-param tenantId string = '351ea326-1a66-4da2-addd-15d37c541283'
+var datafactoryLinkedServiceName = 'TestLinkedService'
+var datafactoryDatasetName = 'TestDataset'
+var datafactoryPipelineName = 'TestPipeline'
 
-
-
-
-//----------- Storage Account Parameters ------------
-@description('Function Storage Account name')
-@minLength(3)
-@maxLength(24)
-param storageAccountName string = 'komatsu33'
-
-@description('Function Storage Account SKU')
-@allowed([
-  'Standard_LRS'
-  'Standard_GRS'
-  'Standard_RAGRS'
-  'Standard_ZRS'
-  'Premium_LRS'
-  'Premium_ZRS'
-  'Standard_GZRS'
-  'Standard_RAGZRS'
-])
-param storageAccountSku string = 'Standard_LRS'
-
-var buildNumber = uniqueString(resourceGroup().id)
-
-//----------- Storage Account Deployment ------------
-module storageAccountModule 'modules/storage.bicep' = {
-  name: 'stvmdeploy-storage-${buildNumber}'
-  params: {
-    name: storageAccountName
-    sku: storageAccountSku
-    location: location
+resource storageAccount 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+  name: storageAccountName
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
   }
 }
 
-// //----------- App Service Deployment ------------
+resource storageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+  name: '${storageAccountName}/default/${containerName}'
+}
 
-// param appServicePlanName string = 'myAppServicePlan'
-// param appServiceName string = 'myAppService'
-
-// module appServicePlan 'modules/appservice.bicep' = {
-//   name: 'appServicePlanDeployment'
-//   params: {
-//     location: location
-//     appServicePlanName: appServicePlanName
-//   }
-// }
-
-// resource appService 'Microsoft.Web/sites@2021-02-01' = {
-//   name: appServiceName
-//   location: location
-//   properties: {
-//     serverFarmId: appServicePlan.outputs.appServicePlanId  // Referencing the App Service Plan ID output from the module
-//       }
-// }
-
-//----------- KeyVault Deployment ------------
-module keyVaultModule 'modules/keyvault.bicep' = {
-  name: 'stvmdeploy-keyvault-${buildNumber}'
-  params: {
-    keyVaultName: myKeyVault
-    skuName: keyVaultSku
-    location: location
-    tenantId: tenantId
+resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
+  name: dataFactoryName
+  location: location
+  identity: {
+    type: 'SystemAssigned'
   }
 }
 
+resource linkedService 'Microsoft.DataFactory/factories/linkedServices@2018-06-01' = {
+  name: datafactoryLinkedServiceName
+  parent: datafactory
+  properties: {
+    type: 'AzureBlobStorage'
+    typeProperties: {
+      connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccount1};EndpointSuffix=core.windows.net'
+    }
+  }
+}
 
+resource dataset 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
+  name: datafactoryDatasetName
+  parent: datafactory
+  properties: {
+    type: 'AzureBlob'
+    linkedServiceName: {
+      referenceName: datafactoryLinkedServiceName
+      type: 'LinkedServiceReference'
+    }
+    typeProperties: {
+      folderPath: 'adfcontainer'
+      format: {
+        type: 'TextFormat'
+      }
+    }
+  }
+}
 
+resource pipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+  name: datafactoryPipelineName
+  parent: datafactory
+  properties: {
+    activities: [
+      {
+        name: 'CopyFromBlobToBlob'
+        type: 'Copy'
+        inputs: [
+          {
+            referenceName: datafactoryDatasetName
+            type: 'DatasetReference'
+          }
+        ]
+        outputs: [
+          {
+            referenceName: datafactoryDatasetName
+            type: 'DatasetReference'
+          }
+        ]
+        typeProperties: {
+          source: {
+            type: 'BlobSource'
+          }
+          sink: {
+            type: 'BlobSink'
+          }
+        }
+      }
+    ]
+  }
+}
+
+output datafactoryId string = datafactory.id
+output storageAccountId string = storageAccount.id
+output storageContainerId string = storageContainer.id
+output linkedServiceId string = linkedService.id
+output datasetId string = dataset.id
