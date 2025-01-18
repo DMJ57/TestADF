@@ -5,7 +5,7 @@ param dataFactoryName string = 'datafactoryTEST'
 param location string = resourceGroup().location
 
 @description('Name of the Azure Storage Account that contains I/O & O/P data')
-param storageAccountName string = 'adfstorageaccount'
+param storageAccountName string = 'demokomatsu'
 
 @description('Name of the container in the Azure Storage Account')
 param containerName string = 'adfcontainer'
