@@ -36,7 +36,7 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 }
 
 resource linkedService 'Microsoft.DataFactory/factories/linkedServices@2018-06-01' = {
-  name: '${datafactoryName}/${datafactoryLinkedServiceName}'
+  name: '${dataFactoryName}/${datafactoryLinkedServiceName}'
   properties: {
     type: 'AzureBlobStorage'
     typeProperties: {
@@ -46,7 +46,8 @@ resource linkedService 'Microsoft.DataFactory/factories/linkedServices@2018-06-0
 }
 
 resource dataset 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
-  name: '${datafactoryName}/${datafactoryDatasetName}'
+  name: datafactoryDatasetName
+  parent: datafactory
   properties: {
     type: 'AzureBlob'
     linkedServiceName: {
@@ -61,3 +62,42 @@ resource dataset 'Microsoft.DataFactory/factories/datasets@2018-06-01' = {
     }
   }
 }
+
+resource pipeline 'Microsoft.DataFactory/factories/pipelines@2018-06-01' = {
+  name: datafactoryPipelineName
+  parent: datafactory
+  properties: {
+    activities: [
+      {
+        name: 'CopyFromBlobToBlob'
+        type: 'Copy'
+        inputs: [
+          {
+            referenceName: datafactoryDatasetName
+            type: 'DatasetReference'
+          }
+        ]
+        outputs: [
+          {
+            referenceName: datafactoryDatasetName
+            type: 'DatasetReference'
+          }
+        ]
+        typeProperties: {
+          source: {
+            type: 'BlobSource'
+          }
+          sink: {
+            type: 'BlobSink'
+          }
+        }
+      }
+    ]
+  }
+}
+
+output datafactoryId string = datafactory.id
+output storageAccountId string = storageAccount.id
+output storageContainerId string = storageContainer.id
+output linkedServiceId string = linkedService.id
+output datasetId string = dataset.id
