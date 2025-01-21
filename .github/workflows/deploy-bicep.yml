@@ -35,6 +35,7 @@ jobs:
         run: |
           az bicep install
           az bicep upgrade
+          az config set extension.dynamic_install_allow_preview=true
   
       # Step 4: Validate Bicep Template
       # - name: Validate Bicep Template
