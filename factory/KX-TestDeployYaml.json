@@ -1,0 +1,9 @@
+{
+	"name": "KX-TestDeployYaml",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b0a111e0-4593-46c7-acb6-e06b7552067e",
+		"tenantId": "351ea326-1a66-4da2-addd-15d37c541283"
+	}
+}
