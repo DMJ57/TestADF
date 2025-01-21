@@ -37,20 +37,29 @@ jobs:
           az bicep upgrade
   
       # Step 4: Validate Bicep Template
-      - name: Validate Bicep Template
-        run: |
-          az deployment group validate \
-            --resource-group komatsu \
-            --template-file ./bicep/main.bicep \
-            --parameters @./bicep/parameters.json
+      # - name: Validate Bicep Template
+      #   run: |
+      #     az deployment group validate \
+      #       --resource-group komatsu \
+      #       --template-file ./bicep/main.bicep \
+      #       --parameters @./bicep/parameters.json
   
-      # Step 5: Deploy Bicep Template
-      - name: Deploy Bicep Template
+      # # Step 5: Deploy Bicep Template
+      # - name: Deploy Bicep Template
+      #   run: |
+      #     az deployment group create \
+      #       --resource-group komatsu \
+      #       --template-file ./bicep/main.bicep \
+      #       --parameters @./bicep/parameters.json
+      
+
+      - name: Deploy Linked Services
         run: |
-          az deployment group create \
-            --resource-group komatsu \
-            --template-file ./bicep/main.bicep \
-            --parameters @./bicep/parameters.json
+          az datafactory linked-service create \
+            --resource-group komatsu-dev \
+            --factory-name KX-TestDeployYaml \
+            --name testLinkedService \
+            --properties "$(cat ./linkedService/metadata.json)"
 
       # # Step 6: Deploy Bicep Template for keyvault
       # - name: Deploy Bicep Template
