@@ -56,10 +56,11 @@ jobs:
 
       - name: Deploy using bicep module
         run: | 
-              az deployment group create\
+              az datafactory linked-service create\
                 --resource-group komatsu \
-                --template-file ./bicep/main.bicep \
-                --parameters @./bicep/parameters.json
+                --factory-name ADF033 \
+                --name jsontestYaml \
+                --properties "$(cat ./linkedService/AzureBlobStorage1.json)"
 
 
           # az datafactory linked-service create \
