@@ -58,7 +58,7 @@ jobs:
         run: | 
               az deployment group create\
                 --resource-group komatsu \
-                --template-file main.bicep \
+                --template-file ./bicep/main.bicep \
                 --parameters resourceGroupName = 'komatsu'\
                 dataFactoryName = 'ADF033'\
                 linkedServiceName = 'testADF033bicep'\
