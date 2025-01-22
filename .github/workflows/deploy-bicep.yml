@@ -57,7 +57,7 @@ jobs:
       - name: Deploy ARM template
         run: | 
               az deployment group create\
-                --resource-group komatsu-dev \
+                --resource-group komatsu \
                 --template-file ./adf-template/ARMTemplateForFactory.json\
                 --parameters ./adf-template/ARMTemplateParametersForFactory.json
           # az datafactory linked-service create \
