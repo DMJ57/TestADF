@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "factoryName": {
-            "value": "KX-TestDeployYaml"
+            "value": "ADF033"
         },
         "AzureBlobStorage1_connectionString": {
             "value": ""

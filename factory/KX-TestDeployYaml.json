@@ -1,5 +1,5 @@
 {
-	"name": "KX-TestDeployYaml",
+	"name": "ADF033",
 	"location": "eastus",
 	"identity": {
 		"type": "SystemAssigned",
