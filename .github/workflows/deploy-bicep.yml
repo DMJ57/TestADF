@@ -58,8 +58,7 @@ jobs:
         run: | 
               az deployment group create \
                 --resource-group komatsu \
-                --template-file ./linkedService/AzureBlobStorage1.json \
-                --parameters dataFactoryName = ADF033 \
+                --template-file ./linkedService/AzureBlobStorage1.json 
                 
               
 
