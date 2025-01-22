@@ -55,13 +55,11 @@ jobs:
       
 
       - name: Deploy ARM template
-        uses: azure/CLI@v1
-        with : 
-          azcliversion: 2.49.0
-          inlineScript: az deployment group create\
-                          --resource-group komatsu-dev \
-                          --template-file ./adf-template/ARMTemplateForFactory.json\
-                          --parameters ./adf-template/ARMTemplateParametersForFactory.json
+        run: | 
+              az deployment group create\
+                --resource-group komatsu-dev \
+                --template-file ./adf-template/ARMTemplateForFactory.json\
+                --parameters ./adf-template/ARMTemplateParametersForFactory.json
           # az datafactory linked-service create \
           #   --resource-group komatsu-dev \
           #   --factory-name KX-TestDeployYaml \
