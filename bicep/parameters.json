@@ -4,7 +4,17 @@
   "parameters": {
     "location": {
       "value": "eastus"
+    },
+    "resourceGroupName": {
+      "value": "komatsu"
+    },
+    "dataFactoryName" : {
+        "value" : "ADF033"
+      },
+      "linkedServiceName" : {
+        "value" : "testADF033bicep"
+      }
     }
-  }
+
 }
 
