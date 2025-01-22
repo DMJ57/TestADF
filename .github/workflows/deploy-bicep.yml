@@ -54,12 +54,16 @@ jobs:
       #       --parameters @./bicep/parameters.json
       
 
-      - name: Deploy ARM template
+      - name: Deploy using bicep module
         run: | 
               az deployment group create\
                 --resource-group komatsu \
-                --template-file ./adf-template/ARMTemplateForFactory.json\
-                --parameters ./adf-template/ARMTemplateParametersForFactory.json
+                --template-file main.bicep \
+                --parameters resourceGroupName = 'komatsu'\
+                dataFactoryName = 'ADF033'\
+                linkedServiceName = 'testADF033bicep'\
+
+
           # az datafactory linked-service create \
           #   --resource-group komatsu-dev \
           #   --factory-name KX-TestDeployYaml \
