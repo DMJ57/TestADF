@@ -14,7 +14,7 @@
 				"typeProperties": {
 					"variableName": "startMessage",
 					"value": {
-						"value": "@pipeline().parameters.isRunning",
+						"value": "@bool(false)",
 						"type": "Expression"
 					}
 				}
@@ -65,11 +65,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"isRunning": {
-				"type": "bool"
-			}
-		},
 		"variables": {
 			"startMessage": {
 				"type": "Boolean"
