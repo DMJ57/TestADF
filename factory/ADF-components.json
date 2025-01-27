@@ -1,0 +1,21 @@
+{
+	"name": "ADF-components",
+	"properties": {
+		"globalParameters": {
+			"isTrue": {
+				"type": "bool",
+				"value": true
+			},
+			"isFalse": {
+				"type": "bool",
+				"value": false
+			}
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "4a309786-8536-41e9-bebe-855160e292fa",
+		"tenantId": "351ea326-1a66-4da2-addd-15d37c541283"
+	}
+}

@@ -12,9 +12,9 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "startMessage",
+					"variableName": "variable_2",
 					"value": {
-						"value": "@bool(false)",
+						"value": "@pipeline().globalParameters.isTrue",
 						"type": "Expression"
 					}
 				}
@@ -33,7 +33,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@variables('startMessage')",
+						"value": "@variables('variable_2')",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -51,7 +51,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"dataflow": {
-									"referenceName": "dataflow1",
+									"referenceName": "dataflow2",
 									"type": "DataFlowReference"
 								},
 								"compute": {
@@ -66,10 +66,15 @@
 			}
 		],
 		"variables": {
-			"startMessage": {
+			"variable_1": {
+				"type": "Boolean"
+			},
+			"variable_2": {
 				"type": "Boolean"
 			}
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2025-01-27T15:47:32Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
